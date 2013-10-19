@@ -17,8 +17,8 @@ import java.sql.SQLException;
 
 public class mainClass extends JavaPlugin implements Listener
 {
-
 	FileConfiguration cfg;
+	Connection conn;
 	public void onEnable()
 	{
 		getServer().getPluginManager().registerEvents(this, this);
@@ -34,12 +34,8 @@ public class mainClass extends JavaPlugin implements Listener
 	            cfg.options().copyDefaults(true);
 	            saveConfig();
 	        }
-	        String mysql = cfg.getString("mysql");
-			String username = cfg.getString("username");
-			String password = cfg.getString("password");
-			Connection conn;
+		conn = getConnect();
 			try {
-				conn = DriverManager.getConnection(mysql, username, password);
 				PreparedStatement newtbl = conn.prepareStatement("CREATE TABLE IF NOT EXISTS blocks"
 						+ "("
 						+ "id INT NOT NULL AUTO_INCREMENT,"
@@ -57,18 +53,29 @@ public class mainClass extends JavaPlugin implements Listener
 		getLogger().info("Enabled!");
 	}
 	
+	public Connection getConnect() {
+		String mysql = cfg.getString("mysql");
+		String username = cfg.getString("username");
+		String password = cfg.getString("password");
+		try {
+			return DriverManager.getConnection(mysql, username, password);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
 	public void onDisable()
 	{
 		getLogger().info("Disabled!");
 	}
+	
 	@EventHandler
 	@SuppressWarnings("deprecation")
 	public void onPlayerInteract (PlayerInteractEvent e) throws SQLException {
 		String mysql = cfg.getString("mysql");
 		String username = cfg.getString("username");
 		String password = cfg.getString("password");
-		Connection conn = DriverManager.getConnection(mysql, username, password);
 		Player p = e.getPlayer();
 		int click = cfg.getInt("click");
 		if(e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getClickedBlock().getTypeId() == click && p.getItemInHand() != null) {
