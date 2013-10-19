@@ -1,12 +1,4 @@
 package InGameSell;
-
-import java.io.File;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,8 +7,16 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-public class Main extends JavaPlugin implements Listener {
+
+public class mainClass extends JavaPlugin implements Listener
+{
 
 	FileConfiguration cfg;
 	public void onEnable()
@@ -30,6 +30,7 @@ public class Main extends JavaPlugin implements Listener {
 	            cfg.addDefault("mysql", "jdbc:mysql://localhost/dbname");
 	            cfg.addDefault("username", "username");
 	            cfg.addDefault("password", "password");
+	            cfg.addDefault("click", 6);
 	            cfg.options().copyDefaults(true);
 	            saveConfig();
 	        }
@@ -53,13 +54,13 @@ public class Main extends JavaPlugin implements Listener {
 				e.printStackTrace();
 			}
 		
-		getLogger().info(" plugin enabled!");
+		getLogger().info("Enabled!");
 	}
 	
 	
 	public void onDisable()
 	{
-		getLogger().info("Test plugin disabled!");
+		getLogger().info("Disabled!");
 	}
 	@EventHandler
 	@SuppressWarnings("deprecation")
@@ -69,7 +70,8 @@ public class Main extends JavaPlugin implements Listener {
 		String password = cfg.getString("password");
 		Connection conn = DriverManager.getConnection(mysql, username, password);
 		Player p = e.getPlayer();
-		if(e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getClickedBlock().getTypeId() == 6 && p.getItemInHand() != null) {
+		int click = cfg.getInt("click");
+		if(e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getClickedBlock().getTypeId() == click && p.getItemInHand() != null) {
 			e.setCancelled(true);
 			int id = p.getItemInHand().getTypeId();
 			int subid = p.getItemInHand().getDurability();
@@ -93,10 +95,10 @@ public class Main extends JavaPlugin implements Listener {
 						newcash.setString(2, name);
 							if(newcash.executeUpdate() != 0) {
 								p.setItemInHand(null);
-								e.getPlayer().sendMessage("Вы продали "+col+" блок(ов) с ID "+id+":"+subid+" на общую сумму в "+cash+" доллар(ов).\nТеперь Ваш игровой счет составляет "+newbalance+" доллар(ов).");
+								e.getPlayer().sendMessage("Р’С‹ РїСЂРѕРґР°Р»Рё "+col+" Р±Р»РѕРє(РѕРІ) СЃ ID "+id+":"+subid+" РЅР° РѕР±С‰СѓСЋ СЃСѓРјРјСѓ РІ "+cash+" РґРѕР»Р»Р°СЂ(РѕРІ).\nРўРµРїРµСЂСЊ Р’Р°С€ РёРіСЂРѕРІРѕР№ СЃС‡РµС‚ СЃРѕСЃС‚Р°РІР»СЏРµС‚ "+newbalance+" РґРѕР»Р»Р°СЂ(РѕРІ).");
 							}
 							else {
-								e.getPlayer().sendMessage("Произошла ошибка");
+								e.getPlayer().sendMessage("РџСЂРѕРёР·РѕС€Р»Р° РѕС€РёР±РєР°");
 							}
 					}
 			}
