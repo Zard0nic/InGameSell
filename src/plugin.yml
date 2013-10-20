@@ -1,7 +1,7 @@
 name: InGameSell
 main: InGameSell.mainClass
 description: In-game selling blocks and items.
-version: 0.2
+version: 0.4
 author: Zard0nic
 
 commands:
@@ -10,3 +10,13 @@ commands:
       permission: ingamesell.addsell
       description: Добавление данных для продажи вещей и блоков в БД.
       usage: /addsell [id] [subid] [price]
+   editsell:
+      usage: /editsell [id] [subid] [price]
+      description: Изменение данных в БД для продажи вещей и блоков.
+      permission: ingamesell.editsell
+      permission-message: У вас нет прав на использование данной команды!
+   helpsell:
+      usage: /helpsell
+      description: Помощь в использовании плагина "InGameSell"
+      permission: ingamesell.helpsell
+      permission-message: У вас нет прав на использование данной команды!

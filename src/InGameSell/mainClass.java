@@ -53,6 +53,8 @@ public class mainClass extends JavaPlugin implements Listener
 				e.printStackTrace();
 			}
 		getCommand("addsell").setExecutor(new Commands(this));
+		getCommand("editsell").setExecutor(new Commands(this));
+		getCommand("helpsell").setExecutor(new Commands(this));
 		getLogger().info("Enabled!");
 	}
 	

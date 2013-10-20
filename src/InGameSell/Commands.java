@@ -18,6 +18,7 @@ public class Commands implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String lbl, String [] args) {
 		Player player = (Player) sender;
+		if(cmd.getName().equalsIgnoreCase("addsell") || cmd.getName().equalsIgnoreCase("editsell")) {
 		int id = Integer.parseInt(args[0]);
 		int subid = Integer.parseInt(args[1]);
 		int price = Integer.parseInt(args[2]);
@@ -43,6 +44,35 @@ public class Commands implements CommandExecutor {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			return true;
+		}
+		if(cmd.getName().equalsIgnoreCase("editsell") && id != 0 && price != 0) {
+			try {
+				String mysql = plugin.cfg.getString("mysql");
+				String username = plugin.cfg.getString("username");
+				String password = plugin.cfg.getString("password");
+				Connection conn = DriverManager.getConnection(mysql, username, password);
+				PreparedStatement editsell = conn.prepareStatement("UPDATE blocks SET price = ? WHERE id = ? AND subid = ?");
+				editsell.setInt(1, price);
+				editsell.setInt(2, id);
+				editsell.setInt(3, subid);
+				if(editsell.executeUpdate() != 0) {
+				player.sendMessage("Данные в БД были успешно изменены!");
+				}
+				else {
+					player.sendMessage("Указанные ID и Subid не были найдены в БД. Воспользуйтесь коммандой /addsell!");
+				}
+				conn.close();
+			}
+			catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return true;
+		}
+		}
+		if(cmd.getName().equalsIgnoreCase("helpsell")) {
+			player.sendMessage("Чтобы добавить значения в БД используйте команду \"/addsell [id] [subid] [цена]\"\nЧтобы изменить значение в БД используйте команду \"/editsell [id] [subid] [новая цена]\"");
 			return true;
 		}
 		return false;
