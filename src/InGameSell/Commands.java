@@ -15,11 +15,11 @@ public class Commands implements CommandExecutor {
 	public Commands(mainClass plugin) {
 		this.plugin = plugin;
 	}
-	String mysql = plugin.cfg.getString("mysql");
-	String username = plugin.cfg.getString("username");
-	String password = plugin.cfg.getString("password");
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String lbl, String [] args) {
+		String mysql = plugin.cfg.getString("mysql");
+		String username = plugin.cfg.getString("username");
+		String password = plugin.cfg.getString("password");
 		Player player = (Player) sender;
 		if(cmd.getName().equalsIgnoreCase("addsell") || cmd.getName().equalsIgnoreCase("editsell")) {
 		int id = Integer.parseInt(args[0]);
