@@ -15,6 +15,9 @@ public class Commands implements CommandExecutor {
 	public Commands(mainClass plugin) {
 		this.plugin = plugin;
 	}
+	String mysql = plugin.cfg.getString("mysql");
+	String username = plugin.cfg.getString("username");
+	String password = plugin.cfg.getString("password");
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String lbl, String [] args) {
 		Player player = (Player) sender;
@@ -24,19 +27,16 @@ public class Commands implements CommandExecutor {
 		int price = Integer.parseInt(args[2]);
 		if(cmd.getName().equalsIgnoreCase("addsell") && id != 0 && price != 0) {
 			try {
-				String mysql = plugin.cfg.getString("mysql");
-				String username = plugin.cfg.getString("username");
-				String password = plugin.cfg.getString("password");
 				Connection conn = DriverManager.getConnection(mysql, username, password);
 				PreparedStatement addsell = conn.prepareStatement("INSERT IGNORE INTO blocks (id,subid,price) VALUES (?,?,?)");
 				addsell.setInt(1, id);
 				addsell.setInt(2, subid);
 				addsell.setInt(3, price);
 				if(addsell.executeUpdate() != 0) {
-				player.sendMessage("Данные были успешно занесены в БД!");
+				player.sendMessage("Р”Р°РЅРЅС‹Рµ Р±С‹Р»Рё СѓСЃРїРµС€РЅРѕ Р·Р°РЅРµСЃРµРЅС‹ РІ Р‘Р”!");
 				}
 				else {
-					player.sendMessage("Данный ID уже имеется в базе или значения были неверно указаны!");
+					player.sendMessage("Р”Р°РЅРЅС‹Р№ ID СѓР¶Рµ РёРјРµРµС‚СЃСЏ РІ Р±Р°Р·Рµ РёР»Рё Р·РЅР°С‡РµРЅРёСЏ Р±С‹Р»Рё РЅРµРІРµСЂРЅРѕ СѓРєР°Р·Р°РЅС‹!");
 				}
 				conn.close();
 			}
@@ -48,19 +48,16 @@ public class Commands implements CommandExecutor {
 		}
 		if(cmd.getName().equalsIgnoreCase("editsell") && id != 0 && price != 0) {
 			try {
-				String mysql = plugin.cfg.getString("mysql");
-				String username = plugin.cfg.getString("username");
-				String password = plugin.cfg.getString("password");
 				Connection conn = DriverManager.getConnection(mysql, username, password);
 				PreparedStatement editsell = conn.prepareStatement("UPDATE blocks SET price = ? WHERE id = ? AND subid = ?");
 				editsell.setInt(1, price);
 				editsell.setInt(2, id);
 				editsell.setInt(3, subid);
 				if(editsell.executeUpdate() != 0) {
-				player.sendMessage("Данные в БД были успешно изменены!");
+				player.sendMessage("Р”Р°РЅРЅС‹Рµ РІ Р‘Р” Р±С‹Р»Рё СѓСЃРїРµС€РЅРѕ РёР·РјРµРЅРµРЅС‹!");
 				}
 				else {
-					player.sendMessage("Указанные ID и Subid не были найдены в БД. Воспользуйтесь коммандой /addsell!");
+					player.sendMessage("РЈРєР°Р·Р°РЅРЅС‹Рµ ID Рё Subid РЅРµ Р±С‹Р»Рё РЅР°Р№РґРµРЅС‹ РІ Р‘Р”. Р’РѕСЃРїРѕР»СЊР·СѓР№С‚РµСЃСЊ РєРѕРјРјР°РЅРґРѕР№ /addsell!");
 				}
 				conn.close();
 			}
@@ -72,7 +69,7 @@ public class Commands implements CommandExecutor {
 		}
 		}
 		if(cmd.getName().equalsIgnoreCase("helpsell")) {
-			player.sendMessage("Чтобы добавить значения в БД используйте команду \"/addsell [id] [subid] [цена]\"\nЧтобы изменить значение в БД используйте команду \"/editsell [id] [subid] [новая цена]\"");
+			player.sendMessage("Р§С‚РѕР±С‹ РґРѕР±Р°РІРёС‚СЊ Р·РЅР°С‡РµРЅРёСЏ РІ Р‘Р” РёСЃРїРѕР»СЊР·СѓР№С‚Рµ РєРѕРјР°РЅРґСѓ \"/addsell [id] [subid] [С†РµРЅР°]\"\nР§С‚РѕР±С‹ РёР·РјРµРЅРёС‚СЊ Р·РЅР°С‡РµРЅРёРµ РІ Р‘Р” РёСЃРїРѕР»СЊР·СѓР№С‚Рµ РєРѕРјР°РЅРґСѓ \"/editsell [id] [subid] [РЅРѕРІР°СЏ С†РµРЅР°]\"");
 			return true;
 		}
 		return false;
