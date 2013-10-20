@@ -1,5 +1,12 @@
 name: InGameSell
-main: InGameSell.Main
+main: InGameSell.mainClass
 description: In-game selling blocks and items.
 version: 0.2
 author: Zard0nic
+
+commands:
+   addsell:
+      permission-message: У вас нет прав на использование данной команды!
+      permission: ingamesell.addsell
+      description: Добавление данных для продажи вещей и блоков в БД.
+      usage: /addsell [id] [subid] [price]
