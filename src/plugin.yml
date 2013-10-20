@@ -1,4 +1,5 @@
 name: InGameSell
 main: InGameSell.Main
 description: In-game selling blocks and items.
-version: 0.1
+version: 0.2
+author: Zard0nic
