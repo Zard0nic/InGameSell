@@ -96,10 +96,10 @@ public class mainClass extends JavaPlugin implements Listener
 						newcash.setString(2, name);
 							if(newcash.executeUpdate() != 0) {
 								p.setItemInHand(null);
-								e.getPlayer().sendMessage("Вы продали "+col+" блок(ов) с ID "+id+":"+subid+" на общую сумму в "+cash+" доллар(ов).\nТеперь Ваш игровой счет составляет "+newbalance+" доллар(ов).");
+								e.getPlayer().sendMessage("Р’С‹ РїСЂРѕРґР°Р»Рё "+col+" Р±Р»РѕРє(РѕРІ) СЃ ID "+id+":"+subid+" РЅР° РѕР±С‰СѓСЋ СЃСѓРјРјСѓ РІ "+cash+" РґРѕР»Р»Р°СЂ(РѕРІ).\nРўРµРїРµСЂСЊ Р’Р°С€ РёРіСЂРѕРІРѕР№ СЃС‡РµС‚ СЃРѕСЃС‚Р°РІР»СЏРµС‚ "+newbalance+" РґРѕР»Р»Р°СЂ(РѕРІ).");
 							}
 							else {
-								e.getPlayer().sendMessage("Произошла ошибка");
+								e.getPlayer().sendMessage("РџСЂРѕРёР·РѕС€Р»Р° РѕС€РёР±РєР°");
 							}
 					}
 			}
