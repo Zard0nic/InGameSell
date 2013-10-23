@@ -17,7 +17,6 @@ import java.sql.SQLException;
 
 public class mainClass extends JavaPlugin implements Listener
 {
-
 	FileConfiguration cfg;
 	public void onEnable()
 	{
@@ -31,6 +30,7 @@ public class mainClass extends JavaPlugin implements Listener
 	            cfg.addDefault("username", "username");
 	            cfg.addDefault("password", "password");
 	            cfg.addDefault("click", 6);
+	            cfg.addDefault("subid", 4);
 	            cfg.options().copyDefaults(true);
 	            saveConfig();
 	        }
@@ -72,7 +72,8 @@ public class mainClass extends JavaPlugin implements Listener
 		Connection conn = DriverManager.getConnection(mysql, username, password);
 		Player p = e.getPlayer();
 		int click = cfg.getInt("click");
-		if(e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getClickedBlock().getTypeId() == click && p.getItemInHand() != null) {
+		int clicksubid = cfg.getInt("subid");
+		if(e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getClickedBlock().getTypeId() == click && e.getClickedBlock().getData() == clicksubid && p.getItemInHand() != null) {
 			e.setCancelled(true);
 			int id = p.getItemInHand().getTypeId();
 			int subid = p.getItemInHand().getDurability();
