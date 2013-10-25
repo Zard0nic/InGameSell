@@ -5,6 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -14,10 +15,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.economy.EconomyResponse;
+
 
 public class mainClass extends JavaPlugin implements Listener
 {
 	FileConfiguration cfg;
+	
+	public static Economy econ = null;
+	
+	@Override
 	public void onEnable()
 	{
 		getServer().getPluginManager().registerEvents(this, this);
@@ -55,14 +63,34 @@ public class mainClass extends JavaPlugin implements Listener
 		getCommand("addsell").setExecutor(new Commands(this));
 		getCommand("editsell").setExecutor(new Commands(this));
 		getCommand("helpsell").setExecutor(new Commands(this));
+		
+		if (!setupEconomy() ) {
+            getLogger().info("Не удалось подключиться к экономике!");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+		
 		getLogger().info("Enabled!");
 	}
 	
-	
+	@Override
 	public void onDisable()
 	{
 		getLogger().info("Disabled!");
 	}
+	
+	private boolean setupEconomy() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            return false;
+        }
+        econ = rsp.getProvider();
+        return econ != null;
+    }
+	
 	@EventHandler
 	@SuppressWarnings("deprecation")
 	public void onPlayerInteract (PlayerInteractEvent e) throws SQLException {
@@ -86,23 +114,14 @@ public class mainClass extends JavaPlugin implements Listener
 				int result = result1.getInt("price");
 				int cash = result * col;
 				String name = e.getPlayer().getName();
-				PreparedStatement oldcash = conn.prepareStatement("SELECT * FROM iConomy WHERE username = ?");
-				oldcash.setString(1, name);
-				ResultSet balance1 = oldcash.executeQuery();
-					while(balance1.next()) {
-						int balance = balance1.getInt("balance");
-						int newbalance = balance + cash;
-						PreparedStatement newcash = conn.prepareStatement("UPDATE iConomy SET balance = ? WHERE username = ?");
-						newcash.setInt(1, newbalance);
-						newcash.setString(2, name);
-							if(newcash.executeUpdate() != 0) {
+				EconomyResponse r = mainClass.econ.depositPlayer(name, cash);
+							if(r.transactionSuccess()) {
 								p.setItemInHand(null);
-								e.getPlayer().sendMessage("Вы продали "+col+" блок(ов) с ID "+id+":"+subid+" на общую сумму в "+cash+" доллар(ов).\nТеперь Ваш игровой счет составляет "+newbalance+" доллар(ов).");
+								e.getPlayer().sendMessage("Вы продали "+col+" блок(ов) с ID "+id+":"+subid+" на общую сумму в "+cash+" доллар(ов).\nТеперь Ваш игровой счет составляет "+econ.format(r.balance)+".");
 							}
 							else {
 								e.getPlayer().sendMessage("Произошла ошибка");
 							}
-					}
 			}
 			
 			conn.close();
