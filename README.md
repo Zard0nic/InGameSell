@@ -4,10 +4,12 @@ InGameSell
 Продажа вещей и блоков в игре
 
 <b><h4>Как настроить?</h4></b>
+Для начала Вам необходимо устанвоить плагин <a href="http://dev.bukkit.org/bukkit-plugins/vault/">Vault</a> и любой плагин экономики из <a href="https://github.com/MilkBowl/Vault/#supported-plugins">этого списка</a>.
 <code><b>mysql: jdbc:mysql://localhost/dbname</b></code> - Адрес к БД / название БД,  jdbc:mysql:// - не трогаем.<br>
 <code><b>username: username</b></code> - Логин от БД<br>
 <code><b>password: password</b></code> - Пароль от БД<br>
 <code><b>click: 6</b></code> - Id блока, клик по которому будет продавать вещь.<br>
+<code><b>subid: 0</b></code> - Subid блока, клик по которому будет продавать вещь (если у блока нет subid - выставить значение на "0").<br>
 
 <b><h4>Как добавить блок или предмет в продажу?</h4></b>
 Для добавления блока или предмета в продажу вы можете использовать любой из 2 вариантов:<br>
